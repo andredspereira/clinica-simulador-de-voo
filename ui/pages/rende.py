@@ -13,8 +13,8 @@ from ui.charts import CONFIG, leverage_bars, payback_strip
 U.init()
 st.title("Onde rende cada euro")
 plan = U.plan()
-base_words = "continuar como está" if not S.changed_levers(plan) else "o plano que está em Pilotar"
-T.lead(f"Cada barra junta um pouco mais de uma alavanca a {base_words} e mede o que volta até 2036, em 200 "
+base_words = "a continuar como está" if not S.changed_levers(plan) else "ao plano que está em Pilotar"
+T.lead(f"Cada barra junta um pouco mais de uma alavanca {base_words} e mede o que volta até 2036, em 200 "
        "futuros simulados. Acima de 1 €, paga o que custa.")
 
 with st.spinner("A testar cada alavanca em 200 futuros..."):
