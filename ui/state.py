@@ -32,7 +32,6 @@ YEARS_OPT = ["Não"] + [str(y) for y in range(2027, 2034)]
 # field -> (widget key, plan value -> widget value, widget value -> plan value)
 LEVERS = {
     "marketing": ("w_marketing", lambda v: int(round(v / 1000)), lambda w: float(w) * 1000),
-    "clubs": ("w_clubs", int, int),
     "conv": ("w_conv", lambda v: int(round(v * 100)), lambda w: w / 100.0),
     "price": ("w_price", lambda v: int(round(v * 100)), lambda w: w / 100.0),
     "callback": ("w_callback", bool, bool),

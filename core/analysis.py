@@ -133,7 +133,6 @@ class Increment:
 
 INCREMENTS: list[Increment] = [
     Increment("mkt", "Marketing digital", "spend_attract", True),
-    Increment("clubs", "Parcerias com clubes", "spend_attract", True),
     Increment("callback", "Devolução de chamadas", "spend_access", True),
     Increment("online", "Marcação online", "spend_access", True),
     Increment("desk", "Equipa de receção", "spend_access", True),
@@ -155,8 +154,6 @@ def increment_variant(inc_id: str, plan: S.Plan) -> tuple[S.Plan, bool, str]:
     """
     if inc_id == "mkt":
         return plan.with_changes(marketing=plan.marketing + 100_000), False, "mais 100 mil € por ano"
-    if inc_id == "clubs":
-        return plan.with_changes(clubs=plan.clubs + 6), False, "mais 6 parcerias (cerca de 50 mil € por ano)"
     if inc_id == "callback":
         if plan.callback:
             return plan.with_changes(callback=False), True, "já está no plano"

@@ -111,7 +111,7 @@ def test_plan_without_changes_reproduces_baseline_exactly():
 def test_zero_marketing_and_referrals_fall_to_a_floor():
     p = M.central_params(1)
     p["wom_scale"] = np.zeros(1)
-    plan = BASE.with_changes(marketing=0.0, clubs=0)
+    plan = BASE.with_changes(marketing=0.0)
     r = _run([plan], p, 1)
     E = r.m["E"][:, 0]
     assert E.min() >= 0.0 and r.m["L"].min() >= 0.0

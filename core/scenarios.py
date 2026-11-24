@@ -26,7 +26,6 @@ OPEN_END = END_YEAR + 1  # a group that runs until the end of the horizon
 class Plan:
     # Atrair doentes
     marketing: float = A.value("marketing0")  # EUR per year
-    clubs: int = int(A.value("clubs0"))
     conv: float = A.value("ins_share0")  # share of demand through insurers and subsystems
     price: float = 1.0  # index of private prices, 1 = today
     # Atender quem chega
@@ -87,7 +86,6 @@ def policy_arrays(plans: list[Plan], n_futures: int) -> dict[str, np.ndarray]:
     for plan in plans:
         rows.append({
             "mkt": plan.marketing,
-            "clubs": float(plan.clubs),
             "conv": plan.conv,
             "price": plan.price,
             "callback": 1.0 if plan.callback else 0.0,
@@ -138,7 +136,7 @@ def lever_costs(plan: Plan, base: Plan = BASELINE) -> dict[str, dict[str, float]
     Returns {group: {"per_year": EUR/year, "once": EUR}}.
     """
     fd_cost = A.value("fd_cost")
-    attract = (plan.marketing - base.marketing) + (plan.clubs - base.clubs) * A.value("club_cost")
+    attract = plan.marketing - base.marketing
     access = ((plan.callback - base.callback) * A.value("callback_cost")
               + (plan.online - base.online) * A.value("online_cost")
               + (plan.front_desk - base.front_desk) * fd_cost)
@@ -173,7 +171,7 @@ _HOUSE = dict(callback=True, online=True, front_desk=A.value("front_desk0") + 2,
 
 PRESETS: dict[str, Plan] = {
     "Continuar como está": BASELINE,
-    "Crescer com marketing": BASELINE.with_changes(marketing=260_000.0, clubs=12),
+    "Crescer com marketing": BASELINE.with_changes(marketing=260_000.0),
     "Arrumar a casa primeiro": BASELINE.with_changes(**_HOUSE, marketing=160_000.0, attract_from=2029),
     "Hospital já": BASELINE.with_changes(marketing=160_000.0, hospital_year=2027),
     "Hospital depois de arrumar a casa": BASELINE.with_changes(
@@ -182,7 +180,7 @@ PRESETS: dict[str, Plan] = {
 
 PRESET_NOTES: dict[str, str] = {
     "Continuar como está": "Tudo como hoje.",
-    "Crescer com marketing": "Mais 200 mil € por ano em marketing e o dobro das parcerias com clubes.",
+    "Crescer com marketing": "Mais 200 mil € por ano em marketing digital.",
     "Arrumar a casa primeiro": "Chamadas perdidas, marcação online, mais receção, base digital e médicos; mais marketing só a partir de 2029.",
     "Hospital já": "Hospital decidido em 2027 e mais 100 mil € por ano em marketing.",
     "Hospital depois de arrumar a casa": "Primeiro arrumar a casa; hospital decidido em 2029.",

@@ -264,7 +264,7 @@ def _rule_risk(b: PlanBundle) -> Card | None:
 
 
 def _rule_delay(b: PlanBundle) -> Card | None:
-    if b.plan.marketing <= S.BASELINE.marketing + 20_000 and b.plan.clubs <= S.BASELINE.clubs:
+    if b.plan.marketing <= S.BASELINE.marketing + 20_000:
         return None
     dL = np.median(b.run.m["L"] - b.base.m["L"], axis=1)
     target = dL[36]
@@ -333,7 +333,6 @@ _WHY_TOP = {
     "hospital": "O bloco próprio fica com a cirurgia inteira, se se encher (ciclo 'Bloco cheio').",
     "digital": "A base digital faz as outras alavancas renderem mais e baixa o risco (ciclo 'Risco digital').",
     "mkt": "Há agenda livre: a procura extra é atendida e recomenda a clínica (ciclo 'Boca a boca').",
-    "clubs": "Há agenda livre: a procura extra é atendida e recomenda a clínica (ciclo 'Boca a boca').",
 }
 
 

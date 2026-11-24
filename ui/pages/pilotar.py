@@ -31,9 +31,6 @@ with left:
         st.select_slider("Marketing digital, por ano", options=list(range(0, 410, 10)), key="w_marketing",
                          format_func=lambda v: F.eur(v * 1000), on_change=ch)
         T.cost_note(f"Hoje: {F.eur(S.BASELINE.marketing)} por ano. Demora alguns meses a fazer efeito.")
-        st.select_slider("Parcerias com clubes e federações", options=list(range(0, 21)), key="w_clubs",
-                         on_change=ch)
-        T.cost_note(f"Cada parceria custa cerca de {F.eur(A.value('club_cost'))} por ano.")
         st.select_slider("Peso das convenções na procura", options=list(range(40, 81, 5)), key="w_conv",
                          format_func=lambda v: f"{v}%", on_change=ch)
         T.cost_note("Sem custo direto: mais acordos trazem mais doentes, a preços mais baixos.")

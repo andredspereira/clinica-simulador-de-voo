@@ -24,7 +24,7 @@ tabs = st.tabs(["Fronteira", "Estrutura", "Pressupostos", "Contas", "O que medir
 with tabs[0]:
     c1, c2, c3 = st.columns(3, gap="medium")
     c1.markdown("""**Dentro do modelo (endógeno)**
-- Notoriedade, pedidos de marcação e canais (telefone, site, seguradoras e clubes)
+- Notoriedade, pedidos de marcação e canais (telefone, site, seguradoras e outras referenciações)
 - Chamadas atendidas, devolução, marcação online e doentes que desistem
 - Lista de espera, agenda médica, faltas e consultas de seguimento
 - Médicos: recrutamento, adaptação, saídas e gabinetes
@@ -56,7 +56,7 @@ Cada uma pode mudar em *E se o mundo mudar?*, na página Pilotar.""")
 with tabs[1]:
     st.markdown("#### Stocks e fluxos")
     stocks = [
-        ("Notoriedade", "pessoas", "marketing (com atraso), parcerias, boca a boca, rede dos médicos, novas unidades",
+        ("Notoriedade", "pessoas", "marketing (com atraso), boca a boca, rede dos médicos, novas unidades",
          "esquecimento (meia-vida de 6 a 18 meses)"),
         ("Lista de espera para primeira consulta", "pessoas", "pedidos marcados (depois de perdas no acesso e de quem "
          "não aceita a espera)", "primeiras consultas, limitadas pela agenda livre"),
@@ -165,7 +165,7 @@ with tabs[3]:
 | Cirurgia | em hospitais parceiros, os honorários da equipa; no bloco próprio, o episódio inteiro, e a receita de bloco dos cirurgiões de fora |
 | Outras especialidades | valor de partida, que acompanha 60% da variação da atividade de ortopedia |
 | Custos variáveis | parte paga por ato a médicos, técnicos e fisioterapeutas; implantes e consumíveis no hospital; 4% de consumíveis e faturação |
-| Custos fixos | estrutura (calibrada para a margem de partida), receção, apoio por médico, marketing, parcerias, sistemas, devolução de chamadas, marcação online, contratações, nova clínica e hospital |
+| Custos fixos | estrutura (calibrada para a margem de partida), receção, apoio por médico, marketing, sistemas, devolução de chamadas, marcação online, contratações, nova clínica e hospital |
 | EBITDA | faturação menos custos variáveis, custos fixos e custo de incidentes |
 | Caixa | EBITDA menos investimento, juros, amortização da dívida e 25% do EBITDA positivo (impostos e reinvestimento corrente), mais o empréstimo recebido |
 | Travão de caixa | abaixo de -1 M€ de caixa, o investimento opcional do plano (marketing, base digital, receção, contratações) é cortado aos poucos |

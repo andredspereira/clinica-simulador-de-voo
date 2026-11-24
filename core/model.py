@@ -176,7 +176,7 @@ def _baseline_money(p, k, s0):
     var = (p["fee_cons"] * r_cons + p["fee_exam"] * r_exam + p["fee_physio"] * r_phys
            + p["fee_surg"] * r_surg + p["fee_other"] * r_other + p["consumables"] * rev)
     fixed = (p["front_desk0"] * p["fd_cost"] / 12 + p["doctors0"] * p["doctor_support"] / 12
-             + p["marketing0"] / 12 + p["clubs0"] * p["club_cost"] / 12 + p["maint0"] / 12
+             + p["marketing0"] / 12 + p["maint0"] / 12
              + k["h0"] * p["recruit_cost"] + p["incident_rate"] / 12 * p["incident_cost"])
     return float(rev[0]), float(var[0]), float(fixed[0])
 
@@ -267,9 +267,8 @@ def calibrate(p: dict[str, np.ndarray], structure: float | None = None,
     tauL = p["noto_halflife"] / math.log(2.0)
     satL0 = 1.0 - L0 / p["catchment"]
     Stot0 = (L0 / tauL) / satL0
-    W = p["w_mkt"] + p["w_club"] + p["w_wom"] + p["w_doc"] + p["w_base"]
+    W = p["w_mkt"] + p["w_wom"] + p["w_doc"] + p["w_base"]
     k["k_mkt"] = p["w_mkt"] / W * Stot0
-    k["k_club"] = p["w_club"] / W * Stot0 / p["clubs0"]
     k["k_wom"] = p["w_wom"] / W * Stot0 / (C1 * s_0) * p.get("wom_scale", 1.0)
     k["k_doc"] = p["w_doc"] / W * Stot0 / Deff0
     k["k_base"] = p["w_base"] / W * Stot0
@@ -387,7 +386,7 @@ def simulate(p: dict[str, np.ndarray], pol: dict[str, np.ndarray], world: dict[s
     labour = world["labour"]
     tau_r = p["recruit_delay"] * labour
     floor = p["credit_floor"]
-    mkt0, clubs0, maint0, fd0 = p["marketing0"], p["clubs0"], p["maint0"], p["front_desk0"]
+    mkt0, maint0, fd0 = p["marketing0"], p["maint0"], p["front_desk0"]
 
     for i in range(steps):
         t = i * dt
@@ -400,7 +399,6 @@ def simulate(p: dict[str, np.ndarray], pol: dict[str, np.ndarray], world: dict[s
         on_h = (t >= pol["h_from"]) & (t < pol["h_to"])
         theta = 1.0 / (1.0 + np.exp(-np.clip((Cash - floor) / THETA_SCALE, -50.0, 50.0)))
         mkt_spend = mkt0 + theta * (np.where(on_a, pol["mkt"], mkt0) - mkt0)  # EUR/year
-        clubs_now = clubs0 + theta * (np.where(on_a, pol["clubs"], clubs0) - clubs0)
         conv_now = np.where(on_a, pol["conv"], ins0)
         price_now = np.where(on_a, pol["price"], 1.0)
         cb_on = pol["callback"] * on_s
@@ -498,10 +496,10 @@ def simulate(p: dict[str, np.ndarray], pol: dict[str, np.ndarray], world: dict[s
         rep_star = np.clip(1.0 + 4.0 * sat_share - Im, 0.0, 5.0)
         tau_rep = np.where(rep_star > Rep, p["rep_up"], p["rep_down"])
 
-        # Notoriety inflows: marketing, clubs, word of mouth, doctors, new sites.
+        # Notoriety inflows: marketing, word of mouth, doctors, new sites and a stable base.
         satL = np.maximum(1.0 - L / p["catchment"], 0.0)
         in_mkt = k["k_mkt"] * (Meff / k["Meff0"]) ** p["mkt_curve"]
-        inflow = (k["k_base"] + in_mkt + k["k_club"] * clubs_now + k["k_wom"] * C1 * sat_share
+        inflow = (k["k_base"] + in_mkt + k["k_wom"] * C1 * sat_share
                   + k["k_doc"] * Deff + k["k_clinic"] * Kr + k["k_hosp"] * hosp_frac) * satL
 
         # Competition answers our growth and our price cuts.
@@ -565,11 +563,11 @@ def simulate(p: dict[str, np.ndarray], pol: dict[str, np.ndarray], world: dict[s
         var = (p["fee_cons"] * r_cons + p["fee_exam"] * r_exam + p["fee_physio"] * r_phys
                + p["fee_surg"] * r_surg + p["fee_surg"] * team_fee * S_own
                + p["hosp_var"] * (r_own + r_ext) + p["fee_other"] * r_other + p["consumables"] * rev)
-        lever_cost = (mkt_spend / 12.0 + clubs_now * p["club_cost"] / 12.0 + FD * p["fd_cost"] / 12.0
+        lever_cost = (mkt_spend / 12.0 + FD * p["fd_cost"] / 12.0
                       + maint_now / 12.0 + cb_on * p["callback_cost"] / 12.0 + ol_on * p["online_cost"] / 12.0
                       + setup_now * (pol["callback"] * p["callback_setup"] + pol["online"] * p["online_setup"])
                       + (D + Dn) * p["doctor_support"] / 12.0 + hires * p["recruit_cost"])
-        spend_attract = mkt_spend / 12.0 + clubs_now * p["club_cost"] / 12.0
+        spend_attract = mkt_spend / 12.0
         spend_access = (FD * p["fd_cost"] / 12.0 + cb_on * p["callback_cost"] / 12.0 + ol_on * p["online_cost"] / 12.0
                         + setup_now * (pol["callback"] * p["callback_setup"] + pol["online"] * p["online_setup"]))
         spend_capacity = ((D + Dn) * p["doctor_support"] / 12.0 + hires * p["recruit_cost"]

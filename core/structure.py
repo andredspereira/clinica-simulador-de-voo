@@ -53,7 +53,6 @@ N = Node
 NODES: list[Node] = [
     # Levers: what the clinic controls.
     N("mkt", "Marketing digital", "lever", "Campanhas online para dar a conhecer a clínica."),
-    N("clubs", "Parcerias com clubes", "lever", "Apoio médico a clubes e federações, em troca de visibilidade."),
     N("conv", "Convenções", "lever", "Acordos com seguradoras e subsistemas: mais doentes, a preços mais baixos."),
     N("price", "Preços particulares", "lever", "O nível de preços para quem paga do seu bolso."),
     N("callback", "Devolução de chamadas", "lever",
@@ -79,7 +78,7 @@ NODES: list[Node] = [
     N("invest", "Dinheiro para investir", "mechanism",
       "O plano só se faz se houver caixa: quando a caixa aperta, o investimento opcional trava.", stage=1),
     N("price_avg", "Preço médio", "mechanism", "O que a clínica recebe, em média, por cada ato.", stage=1),
-    N("enq", "Pedidos de marcação", "mechanism", "Pessoas que ligam, escrevem ou chegam via seguradora ou clube.", stage=2),
+    N("enq", "Pedidos de marcação", "mechanism", "Pessoas que ligam, escrevem ou chegam via seguradora ou outra referenciação.", stage=2),
     N("access", "Pedidos atendidos", "mechanism",
       "A parte dos pedidos que recebe resposta a tempo: chamadas atendidas e pedidos do site tratados.", stage=2),
     N("digital_mat", "Maturidade digital", "mechanism",
@@ -111,7 +110,6 @@ L = Link
 LINKS: list[Link] = [
     # Levers.
     L("mkt", "noto", +1, 0.6, 0.6, True, "O marketing dá a conhecer a clínica, com alguns meses de atraso."),
-    L("clubs", "noto", +1, 0.4, 0.6, True, "Cada clube parceiro traz atletas e famílias que passam a conhecer a clínica."),
     L("conv", "enq", +1, 0.6, 0.6, False, "Mais convenções abrem a porta aos doentes de mais seguradoras."),
     L("conv", "price_avg", -1, 0.6, 0.8, False, "Mas cada consulta por convenção paga cerca de metade."),
     L("price", "price_avg", +1, 0.6, 0.9, False, "Preços particulares mais altos sobem o preço médio."),
@@ -259,7 +257,7 @@ def reachable_from(sources: set[str]) -> set[str]:
 
 # Which levers in a Plan correspond to which lever nodes.
 PLAN_FIELDS_TO_NODES = {
-    "marketing": "mkt", "clubs": "clubs", "conv": "conv", "price": "price",
+    "marketing": "mkt", "conv": "conv", "price": "price",
     "callback": "callback", "online": "online", "front_desk": "desk",
     "digital_once": "digital", "digital_maint": "digital", "hire_rate": "hire",
     "clinic_year": "clinic", "hospital_year": "hospital", "hospital_rooms": "hospital",
