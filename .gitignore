@@ -1,0 +1,18 @@
+# Ambientes e caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+
+# Segredos e configuração local
+.streamlit/secrets.toml
+.claude/
+.env
+
+# Ficheiros de instruções ou notas privadas
+*prompt*
+*PROMPT*
+*.prompt
+notes/

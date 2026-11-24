@@ -1,0 +1,23 @@
+[theme]
+base = "light"
+primaryColor = "#065268"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F6F6F6"
+textColor = "#333333"
+linkColor = "#065268"
+borderColor = "#E3E3E3"
+showWidgetBorder = true
+baseRadius = "0.75rem"
+font = "Poppins:https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+headingFont = "Poppins"
+headingFontWeights = [600, 600, 600, 500, 500, 500]
+chartCategoricalColors = ["#065268", "#17BCBE", "#4CA3BE", "#60919E", "#009DC3", "#A9ABAC"]
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false
+
+[server]
+runOnSave = false
